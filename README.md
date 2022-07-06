@@ -1,2 +1,2 @@
 # cow-compiler
-A small compiler for the COW Esolang
+A small interpreter/virtual machine for the COW Esolang
