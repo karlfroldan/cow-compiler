@@ -168,3 +168,56 @@ void VirtualMachine::cmd_oom() {
 uchar VirtualMachine::get_mem() {
     return this->memory[this->mem_position];
 }
+
+int VirtualMachine::run_program() {
+
+    // While we have not yet reached the end of our program.
+    while (this->program_counter < this->program.size()) {
+        auto i {this->program_counter};
+
+        switch (this->program[i])
+        {
+        case moo:
+            this->cmd_moo();
+            break;
+        case mOo:
+            this->cmd_mOo();
+            break;
+        case moO:
+            this->cmd_moO();
+            break;
+        case mOO:
+            this->cmd_mOO();
+            break;
+        case Moo:
+            this->cmd_Moo();
+            break;
+        case MOo:
+            this->cmd_MOo();
+            break;
+        case MoO:
+            this->cmd_MoO();
+            break;
+        case MOO:
+            this->cmd_MOO();
+            break;
+        case OOO:
+            this->cmd_OOO();
+            break;
+        case MMM:
+            this->cmd_MMM();
+            break;
+        case OOM:
+            this->cmd_OOM();
+            break;
+        case oom:
+            this->cmd_oom();
+            break;
+        default:
+            std::cout << "Program " << this->program[i] << " is not valid.\n";
+            std::cout << "Exiting..." << std::endl;
+            std::exit(5);
+            break;
+        }
+    }
+}

@@ -12,6 +12,8 @@ class VirtualMachine {
 public:
     VirtualMachine(size_t, std::string);
     ~VirtualMachine();
+
+    int run_program();
 private:
     std::vector<Keyword> program;
     size_t program_counter;
