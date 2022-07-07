@@ -13,13 +13,17 @@ public:
     VirtualMachine(size_t, std::string);
     ~VirtualMachine();
 
-    int run_program();
+    void run_program();
 private:
     std::vector<Keyword> program;
     size_t program_counter;
     size_t mem_position;
     std::vector<uchar> memory;
     std::optional<uchar> reg;
+
+    // if TRUE, then increase program counter on execution
+    // if FALSE, then do not increase program counter on execution.
+    bool program_flag;
 
     uchar get_mem();
 

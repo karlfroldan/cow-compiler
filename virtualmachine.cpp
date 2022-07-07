@@ -7,14 +7,14 @@
 
 VirtualMachine::VirtualMachine(size_t memsize, std::string __program)
     : program_counter {0},
-      mem_position {0}
+      mem_position {0},
+      program_flag {true}
 {
     this->memory.reserve(memsize);
-    // fill with 0s.
+    // // fill with 0s.
     for (auto i {0}; i < memsize; ++i) {
-        this->memory[i] = 0;
+        this->memory.push_back(0);
     }
-
     // register is initially null.
     reg.reset();
 
@@ -36,7 +36,7 @@ void VirtualMachine::cmd_moo() {
     }
 
     this->program_counter = i; // place where moo is.
-
+    this->program_flag = false; // we need the MOO to execute.
     if (i < 0) {
         std::cout << "Exit code 2. Command MOO not found!" << std::endl;
         std::exit(2);
@@ -46,7 +46,7 @@ void VirtualMachine::cmd_moo() {
 // Move current memory position back one block.
 void VirtualMachine::cmd_mOo() {
     mem_position -= 1;
-
+    program_flag = true;
     if (mem_position < 0) {
         std::cout << "Exit code 3. Memory Position cannot be negative. This is due to using mOo command incorrectly!" << std::endl;
         std::exit(3);
@@ -55,7 +55,7 @@ void VirtualMachine::cmd_mOo() {
 
 void VirtualMachine::cmd_moO() {
     mem_position += 1;
-
+    program_flag = true;
     if (mem_position >= memory.size()) {
         std::cout << "Exit code 3. Memory Position cannot be larger than 32768. This is due to using moO command incorrectly!" << std::endl;
         std::exit(3);
@@ -69,6 +69,7 @@ void VirtualMachine::cmd_Moo() {
     } else {
         printf("%c", get_mem());
     }
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_mOO() {
@@ -118,10 +119,12 @@ void VirtualMachine::cmd_mOO() {
 
 void VirtualMachine::cmd_MOo() {
     this->memory[this->mem_position] -= 1;
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_MoO() {
     this->memory[this->mem_position] += 1;
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_MOO() {
@@ -139,10 +142,12 @@ void VirtualMachine::cmd_MOO() {
     } else {
         program_counter += 1;
     }
+    program_flag = false;
 }
 
 void VirtualMachine::cmd_OOO() {
     this->memory[this->mem_position] = 0;
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_MMM() {
@@ -153,30 +158,32 @@ void VirtualMachine::cmd_MMM() {
         // clear register
         reg.reset();
     }
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_OOM() {
     printf("%d", get_mem());
+    program_flag = true;
 }
 
 void VirtualMachine::cmd_oom() {
     uchar integer;
     scanf("%hu", &integer);
     this->memory[this->mem_position] = integer;
+    program_flag = true;
 }
 
 uchar VirtualMachine::get_mem() {
     return this->memory[this->mem_position];
 }
 
-int VirtualMachine::run_program() {
+void VirtualMachine::run_program() {
 
     // While we have not yet reached the end of our program.
     while (this->program_counter < this->program.size()) {
         auto i {this->program_counter};
 
-        switch (this->program[i])
-        {
+        switch (this->program[i]) {
         case moo:
             this->cmd_moo();
             break;
@@ -218,6 +225,10 @@ int VirtualMachine::run_program() {
             std::cout << "Exiting..." << std::endl;
             std::exit(5);
             break;
+        }
+
+        if (program_flag) {
+            this->program_counter += 1;
         }
     }
 }
