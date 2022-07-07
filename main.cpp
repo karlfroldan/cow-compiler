@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     s.erase(std::remove(s.begin(), s.end(), '\n'), s.cend());
     trim(s);
     
-    VirtualMachine vm(10, s);
+    VirtualMachine vm((int) pow(2, 15), s);
 
     vm.run_program();
 

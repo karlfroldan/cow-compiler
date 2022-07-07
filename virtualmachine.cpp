@@ -31,8 +31,9 @@ void VirtualMachine::cmd_moo() {
     size_t i { this->program_counter };
 
     // SEARCH for the MOO
-    while (this->program[i] != MOO || i >= 0) {
+    while (this->program[i] != MOO && i >= 0) {
         i -= 1;
+       
     }
 
     this->program_counter = i; // place where moo is.
@@ -56,6 +57,8 @@ void VirtualMachine::cmd_mOo() {
 void VirtualMachine::cmd_moO() {
     mem_position += 1;
     program_flag = true;
+    auto m {memory.size()};
+    std::cout << mem_position << '\n' << m << '\n';
     if (mem_position >= memory.size()) {
         std::cout << "Exit code 3. Memory Position cannot be larger than 32768. This is due to using moO command incorrectly!" << std::endl;
         std::exit(3);
@@ -68,6 +71,7 @@ void VirtualMachine::cmd_Moo() {
         this->memory[this->mem_position] = c;
     } else {
         printf("%c", get_mem());
+        fflush(stdout);
     }
     program_flag = true;
 }
@@ -163,6 +167,7 @@ void VirtualMachine::cmd_MMM() {
 
 void VirtualMachine::cmd_OOM() {
     printf("%d", get_mem());
+    fflush(stdout);
     program_flag = true;
 }
 
